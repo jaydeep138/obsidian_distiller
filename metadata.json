@@ -1,0 +1,5 @@
+{
+  "name": "Obsidian Knowledge Distiller",
+  "description": "An AI-powered tool to extract, refine, and save structured learning notes directly to your Obsidian vault.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Obsidian Knowledge Distiller</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              obsidian: {
+                50: '#f4f4f5',
+                100: '#e4e4e7',
+                200: '#d4d4d8',
+                300: '#a1a1aa',
+                400: '#71717a',
+                500: '#52525b',
+                600: '#3f3f46',
+                700: '#27272a',
+                800: '#18181b',
+                900: '#09090b',
+                accent: '#7c3aed', // Purple accent
+              }
+            },
+            typography: (theme) => ({
+              DEFAULT: {
+                css: {
+                  color: theme('colors.gray.300'),
+                  strong: { color: theme('colors.white') },
+                  h1: { color: theme('colors.white') },
+                  h2: { color: theme('colors.white') },
+                  h3: { color: theme('colors.white') },
+                  a: { color: theme('colors.purple.400') },
+                  code: { color: theme('colors.purple.300') },
+                  blockquote: { borderLeftColor: theme('colors.purple.500'), color: theme('colors.gray.400') },
+                },
+              },
+            }),
+          },
+        },
+      }
+    </script>
+    <style>
+      /* Custom scrollbar for dark theme */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #18181b; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #3f3f46; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #52525b; 
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "marked": "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-obsidian-900 text-gray-200 antialiased h-screen overflow-hidden selection:bg-purple-500 selection:text-white">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
