@@ -16,8 +16,10 @@ import {
   FileText,
   Eye,
   Code,
-  Key
+  Key,
+  Mic
 } from 'lucide-react';
+import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 
 const DEFAULT_VAULT_NAME = "My Vault";
 
@@ -38,6 +40,24 @@ const App: React.FC = () => {
 
   const [refinePrompt, setRefinePrompt] = useState('');
   const [previewMode, setPreviewMode] = useState(true); // Toggle between Edit (false) and Preview (true)
+
+  const { 
+    isListening: isListeningRefine, 
+    toggleListening: toggleRefineListening,
+    hasSupport: hasSpeechSupport
+  } = useSpeechRecognition({
+    onResult: (text) => setRefinePrompt(prev => prev ? `${prev} ${text}` : text)
+  });
+
+  const { 
+    isListening: isListeningEditor, 
+    toggleListening: toggleEditorListening 
+  } = useSpeechRecognition({
+    onResult: (text) => setNoteState(prev => ({
+      ...prev, 
+      generatedContent: prev.generatedContent ? `${prev.generatedContent} ${text}` : text
+    }))
+  });
 
   // Load settings from local storage on mount
   useEffect(() => {
@@ -237,6 +257,15 @@ const App: React.FC = () => {
             >
               <Code size={16} />
             </button>
+            {!previewMode && hasSpeechSupport && (
+              <button 
+                onClick={toggleEditorListening}
+                className={`p-1.5 rounded-md transition-all ${isListeningEditor ? 'bg-red-500/20 text-red-400 animate-pulse' : 'text-gray-500 hover:text-gray-300'}`}
+                title={isListeningEditor ? "Stop Listening" : "Start Dictation"}
+              >
+                <Mic size={16} />
+              </button>
+            )}
             <button 
               onClick={() => setPreviewMode(true)}
               className={`p-1.5 rounded-md transition-all ${previewMode ? 'bg-obsidian-700 text-white shadow' : 'text-gray-500 hover:text-gray-300'}`}
@@ -245,6 +274,13 @@ const App: React.FC = () => {
               <Eye size={16} />
             </button>
           </div>
+        </div>
+
+        <div className="bg-obsidian-800/50 border border-obsidian-700/50 rounded-lg p-4 mb-2">
+          <h3 className="text-purple-300 font-medium mb-1">Please review this</h3>
+          <p className="text-gray-400 text-sm">
+            Your notes should have your version of learning so make sure its the way you learned if not then please edit it or provide command below to modify it in your way
+          </p>
         </div>
 
         {/* Main Content Area */}
@@ -304,6 +340,19 @@ const App: React.FC = () => {
                 onChange={(e) => setRefinePrompt(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleRefine()}
               />
+              {hasSpeechSupport && (
+                <button
+                  onClick={toggleRefineListening}
+                  className={`p-2 rounded-lg border transition-all ${
+                    isListeningRefine 
+                      ? 'bg-red-500/20 border-red-500/50 text-red-400 animate-pulse' 
+                      : 'bg-obsidian-900 border-obsidian-600 text-gray-400 hover:text-gray-200'
+                  }`}
+                  title={isListeningRefine ? "Stop Listening" : "Speak"}
+                >
+                  <Mic size={18} />
+                </button>
+              )}
               <Button 
                 variant="secondary" 
                 onClick={handleRefine}
